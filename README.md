@@ -1,86 +1,110 @@
 # CountCoin
+### Every Spend, in Sight.
 
-**Every Spend, in Sight.**
-
-A calm, warm personal finance tracker built with plain HTML, CSS, and JavaScript. Track income and expenses, browse and filter your transaction history, and see a monthly breakdown of where your money goes — all stored locally in your browser, no backend required.
-
----
+CountCoin is a personal expense tracker for logging income and expenses, seeing where your money is going, and keeping a running balance — all in the browser, with no backend required.
 
 ## Features
 
-- **Add, edit, and delete transactions** — income or expense, with amount, category, date, and an optional description.
-- **Type-aware categories** — the category list updates automatically based on whether you're logging Income or an Expense, so mismatched combinations (e.g. an Expense tagged "Salary") aren't possible.
-- **Dashboard summary** — Available Funds, Total Inflows, and Total Outflows, calculated live from your transactions.
-- **Filtering & search** — filter by type (All / Income / Expense), by category, and free-text search across category and description, with sort options (newest/oldest, highest/lowest amount).
-- **Monthly Overview** — income, expenses, and balance for any month, plus a weekly spending trend chart for the selected month.
-- **Expenses by Category** — a horizontal bar chart of spending by category, built from real transaction data (not hardcoded), with a graceful empty state when there's nothing to show yet.
-- **Delete confirmation modal** — accidental deletes are one extra click away from being undone.
-- **Toast notifications** — lightweight confirmation on add/update/delete.
-- **Form validation** — required amount (> 0), category, and date, with inline error messages.
-- **Persistent storage** — everything is saved to `localStorage`, so your data survives a page refresh or browser restart.
-- **Responsive layout** — tested at 1440, 1200, 1024, 768, 480, 390, and 375px wide, with no horizontal scrolling at any size.
+- Add income and expense transactions with amount, category, date, and description
+- Edit existing transactions
+- Delete transactions, with a confirmation dialog before removal
+- Dynamic categories — the category dropdown updates based on whether Income or Expense is selected, and resets on switch
+- Financial summary: Available Funds, Total Inflows, Total Outflows
+- Filter transactions by type (All / Income / Expense) and by category
+- Search transactions by category or description
+- Sort by newest first, oldest first, highest amount, or lowest amount
+- Monthly overview with a month selector, showing that month's income, expenses, and balance
+- Weekly spending trend chart for the selected month
+- Expense breakdown by category, shown as a bar chart
+- Form validation for amount, category, date, and description
+- Data persistence via the browser's Local Storage
+- Responsive layout for desktop, tablet, and mobile
+
+## Category System
+
+Categories depend on the transaction type:
+
+**Income categories:** Salary, Freelance, Business, Investment, Bonus, Other Income
+
+**Expense categories:** Food, Transport, Shopping, Bills, Entertainment, Health, Education, Rent, Other Expense
+
+Switching between Income and Expense in the form updates the available categories and clears the current selection, so a category from one type can't be saved against the other.
+
+## Financial Summary
+
+The dashboard shows three figures, calculated live from stored transactions:
+
+- **Available Funds** — Total Inflows minus Total Outflows
+- **Total Inflows** — sum of all income transactions
+- **Total Outflows** — sum of all expense transactions
+
+## Data Persistence
+
+Transaction data is persisted using the browser's Local Storage, so it remains available after refreshing the page. There is no backend or database — everything runs client-side.
+
+## Validation
+
+Before a transaction is saved, the form checks:
+
+- **Amount** — must be a valid number greater than 0
+- **Category** — must be selected, and must belong to the currently selected type (Income/Expense)
+- **Date** — required
+- **Description** — required; empty or whitespace-only descriptions are rejected
+
+Validation errors are shown inline next to each field.
+
+## Analytics
+
+**Monthly Overview** — pick a month and see that month's income, expenses, and balance, calculated from the transactions dated within it.
+
+**Spending by week** — the selected month's expenses are grouped into weekly buckets and shown as a bar chart.
+
+**Expenses by category** — total expenses per category are shown as horizontal bars, sorted from highest to lowest. Both charts update automatically as transactions are added, edited, or deleted, and show an empty state when there's no expense data yet.
+
+## Responsive Design
+
+The layout adapts across desktop, tablet, and mobile widths, with breakpoints for the form/list layout, summary cards, filters, and transaction rows.
 
 ## Tech Stack
 
 - HTML5
-- CSS3 (custom properties / design tokens, CSS Grid & Flexbox — no framework)
-- Vanilla JavaScript (no build step, no dependencies)
-- Browser `localStorage` for persistence
+- CSS3 (custom properties for the design system)
+- Vanilla JavaScript (no frameworks or libraries)
+- Browser Local Storage
+- Google Fonts (Inter, Source Serif 4)
 
 ## Project Structure
 
 ```
-.
-├── index.html   # Markup and app shell
-├── style.css    # All styling, design tokens, and responsive rules
-├── script.js    # App logic: state, rendering, validation, storage
-└── README.md
+index.html
+style.css
+script.js
 ```
 
 ## Getting Started
 
-No build tools or installation required.
+1. Clone the repository
+2. Open the project folder
+3. Open `index.html` in a browser
 
-1. Download the three files (`index.html`, `style.css`, `script.js`) into the same folder.
-2. Open `index.html` directly in a browser — or, for the most consistent experience (some browsers restrict `localStorage` on `file://` pages), serve the folder locally:
+No build step or dependencies are required.
 
-   ```bash
-   # from the project folder
-   python3 -m http.server 8000
-   ```
+## How It Works
 
-   Then visit `http://localhost:8000` in your browser.
+1. User adds an income or expense using the form.
+2. The form validates amount, category, date, and description.
+3. The transaction is saved to Local Storage.
+4. The transaction list, financial summary, monthly overview, and charts update.
+5. Users can edit or delete transactions, or filter, search, and sort the list.
 
-That's it — no `npm install`, no build step.
+## Design
 
-## How Data Is Stored
+CountCoin uses a warm cream background with an olive green primary color, and restrained green/rust accents for income and expense amounts. The layout is card-based, with the Available Funds figure set apart as the primary metric. The interface is built around the CountCoin wordmark and its "Every Spend, in Sight." tagline.
 
-Transactions are saved under the `expenseTracker.transactions` key in `localStorage`, as a JSON array of objects shaped like:
+## Future Improvements
 
-```json
-{
-  "id": "tx_...",
-  "type": "expense",
-  "amount": 1200,
-  "category": "Food",
-  "date": "2026-09-10",
-  "description": "Groceries",
-  "createdAt": 1234567890
-}
-```
+These are ideas for later, not current functionality:
 
-Clearing your browser's site data for this page (or clearing `localStorage`) will reset the app to empty.
-
-## Categories
-
-**Income:** Salary, Freelance, Business, Investment, Bonus, Other Income
-**Expense:** Food, Transport, Shopping, Bills, Entertainment, Health, Education, Rent, Other Expense
-
-## Browser Support
-
-Built with standard, widely-supported CSS and JS (Grid, Flexbox, `<dialog>`-free modal, `Intl`/`toLocaleDateString`). Works in current versions of Chrome, Firefox, Safari, and Edge.
-
-## Notes
-
-- The app ships with no pre-loaded sample data — it starts empty for every new user/browser.
-- All calculations (`Available Funds = Total Inflows − Total Outflows`, monthly totals, category breakdowns) are derived live from stored transactions; nothing is hardcoded.
+- Backend/database support for syncing across devices
+- Export/import of transaction data
+- Additional financial reports (e.g. yearly trends)
