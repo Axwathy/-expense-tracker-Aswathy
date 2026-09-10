@@ -1,7 +1,7 @@
 # CountCoin
 ### Every Spend, in Sight.
 
-CountCoin is a personal expense tracker for logging income and expenses, seeing where your money is going, and keeping a running balance — all in the browser, with no backend required.
+CountCoin is a personal expense tracker for logging income and expenses, seeing where your money is going, and keeping a running balance , all in the browser, with no backend required.
 
 ## Features
 
