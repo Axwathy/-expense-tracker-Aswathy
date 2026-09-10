@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CountCoin — Every Spend, in Sight.</title>
+<meta name="description" content="CountCoin — a calm, clear way to track income and expenses.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ HEADER ============ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="8.4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M9.3 9.1c0-.9.9-1.6 2.1-1.6h1c1 0 1.8.5 1.8 1.4 0 .8-.6 1.2-1.6 1.4l-1.4.3c-1.1.2-1.9.7-1.9 1.6 0 .9.9 1.5 2 1.5h1.1c1.2 0 2-.6 2.1-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.7 11.3h4.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <div class="header-text">
+        <h1>CountCoin</h1>
+        <p>Every Spend, in Sight.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ SUMMARY DASHBOARD ============ -->
+    <section class="summary-grid" aria-label="Financial summary">
+      <div class="summary-card summary-balance">
+        <div class="summary-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 7V6.2C7 5 8 4 9.3 4h7.4C17.9 4 19 5 19 6.2V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="4" y="8" width="16" height="12" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        </div>
+        <div class="summary-content">
+          <span class="summary-label">Available Funds</span>
+          <span class="summary-value" id="balanceValue">₹0.00</span>
+        </div>
+      </div>
+
+      <div class="summary-card summary-income">
+        <div class="summary-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L6 11M12 5L18 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="summary-content">
+          <span class="summary-label">Total Inflows</span>
+          <span class="summary-value" id="incomeValue">₹0.00</span>
+        </div>
+      </div>
+
+      <div class="summary-card summary-expense">
+        <div class="summary-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="summary-content">
+          <span class="summary-label">Total Outflows</span>
+          <span class="summary-value" id="expenseValue">₹0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <div class="content-grid">
+
+      <!-- ---- FORM ---- -->
+      <section class="card form-card" id="transactionFormSection" aria-labelledby="formTitle">
+        <h2 id="formTitle">Add Transaction</h2>
+
+        <form id="transactionForm" novalidate>
+          <div class="type-toggle" role="group" aria-label="Transaction type">
+            <button type="button" class="type-btn is-expense active" data-type="expense" aria-pressed="true">Expense</button>
+            <button type="button" class="type-btn is-income" data-type="income" aria-pressed="false">Income</button>
+          </div>
+
+          <div class="form-group">
+            <label for="amountInput">Amount</label>
+            <div class="amount-field">
+              <span class="amount-prefix" aria-hidden="true">₹</span>
+              <input type="number" id="amountInput" name="amount" placeholder="0.00" step="0.01" min="0" inputmode="decimal" aria-describedby="amountError">
+            </div>
+            <p class="field-error" id="amountError"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="categoryInput">Category</label>
+            <select id="categoryInput" name="category" aria-describedby="categoryError">
+              <option value="" disabled selected>Select category</option>
+              <!-- Options populated by script.js, based on the selected Income/Expense type -->
+            </select>
+            <p class="field-error" id="categoryError"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="dateInput">Date</label>
+            <input type="date" id="dateInput" name="date" aria-describedby="dateError">
+            <p class="field-error" id="dateError"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="descriptionInput">Description</label>
+            <textarea id="descriptionInput" name="description" rows="2" placeholder="What was this transaction for?" aria-describedby="descriptionError"></textarea>
+            <p class="field-error" id="descriptionError"></p>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Add Transaction</button>
+            <button type="button" class="btn btn-ghost btn-block" id="cancelEditBtn" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ---- TRANSACTIONS ---- -->
+      <section class="card list-card" aria-labelledby="listTitle">
+        <div class="list-header">
+          <h2 id="listTitle">Transactions</h2>
+          <span class="count-badge" id="transactionCount">0 transactions</span>
+        </div>
+
+        <div class="filters">
+          <div class="filter-tabs" role="group" aria-label="Filter by type">
+            <button type="button" class="filter-tab active" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="filter-tab" data-filter="income" aria-pressed="false">Income</button>
+            <button type="button" class="filter-tab" data-filter="expense" aria-pressed="false">Expense</button>
+          </div>
+
+          <div class="filter-extra">
+            <label class="sr-only" for="categoryFilter">Filter by category</label>
+            <select id="categoryFilter">
+              <option value="all">Category ▼</option>
+              <!-- Option groups populated by script.js: Income categories, then Expense categories -->
+            </select>
+
+            <label class="sr-only" for="sortSelect">Sort transactions</label>
+            <select id="sortSelect">
+              <option value="date-desc">Newest first</option>
+              <option value="date-asc">Oldest first</option>
+              <option value="amount-desc">Highest amount</option>
+              <option value="amount-asc">Lowest amount</option>
+            </select>
+
+            <div class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <label class="sr-only" for="searchInput">Search transactions</label>
+              <input type="search" id="searchInput" placeholder="Search transactions...">
+            </div>
+          </div>
+        </div>
+
+        <ul class="transaction-list" id="transactionList"></ul>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <div class="empty-illustration" aria-hidden="true">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="52" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 6"/>
+              <rect x="34" y="46" width="52" height="36" rx="6" fill="var(--bg)" stroke="var(--border-strong)" stroke-width="2"/>
+              <path d="M34 56H86" stroke="var(--border-strong)" stroke-width="2"/>
+              <circle cx="60" cy="69" r="6" fill="none" stroke="var(--primary)" stroke-width="2"/>
+              <path d="M60 66V72M57 69H63" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>No transactions yet</h3>
+          <p>Start tracking your money by adding your first income or expense using the form.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ MONTHLY OVERVIEW (bonus) ============ -->
+    <section class="card monthly-card">
+      <div class="monthly-header">
+        <h2>Monthly Overview</h2>
+        <label class="sr-only" for="monthSelect">Select month</label>
+        <select id="monthSelect"></select>
+      </div>
+      <div class="monthly-grid">
+        <div class="monthly-stat">
+          <span class="monthly-label">This Month's Income</span>
+          <span class="monthly-value income-text" id="monthIncome">₹0.00</span>
+        </div>
+        <div class="monthly-stat">
+          <span class="monthly-label">This Month's Expenses</span>
+          <span class="monthly-value expense-text" id="monthExpense">₹0.00</span>
+        </div>
+        <div class="monthly-stat">
+          <span class="monthly-label">This Month's Balance</span>
+          <span class="monthly-value" id="monthBalance">₹0.00</span>
+        </div>
+      </div>
+      <div class="monthly-trend" id="monthlyTrend">
+        <span class="monthly-trend-label">Spending by week</span>
+        <div class="monthly-trend-bars" id="monthlyTrendBars"></div>
+      </div>
+    </section>
+
+    <!-- ============ CATEGORY CHART (bonus) ============ -->
+    <section class="card chart-card">
+      <h2>Expenses by Category</h2>
+      <div class="chart-body" id="categoryChart">
+        <div class="chart-empty-state" id="chartEmptyMsg">
+          <div class="chart-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V11M10 20V4M16 20V14M22 20V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <p>No expenses yet — add one to see your category breakdown here.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ DELETE CONFIRM MODAL ============ -->
+<div class="modal-overlay" id="deleteModal" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalDesc">
+    <h3 id="deleteModalTitle">Delete transaction?</h3>
+    <p id="deleteModalDesc">Are you sure you want to permanently delete this transaction?</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="cancelDeleteBtn">Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOASTS ============ -->
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
